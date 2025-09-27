@@ -1,30 +1,127 @@
-import React, { useState } from 'react'
-import { loginTeacher } from '../api/auth'
-import { useNavigate, Link } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, BookOpen } from 'lucide-react';
+import { authAPI } from '../api/auth';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '../context/AuthContext';
+import Loader from '../components/Loader';
 
-export default function TeacherLogin(){
-  const [email,setEmail] = useState('')
-  const [password,setPassword] = useState('')
-  const { login } = useAuth()
-  const nav = useNavigate()
+const TeacherLogin = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { login } = useAuth();
 
-  const submit = async e => {
-    e.preventDefault()
-    const data = await loginTeacher(email,password)
-    login({ role:'teacher', token: data.token })
-    nav('/teacher/dashboard')
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.username.trim() || !formData.password.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter both username and password.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await authAPI.login(formData.username, formData.password);
+      login(result);
+      toast({
+        title: "Welcome back!",
+        description: "Successfully logged in."
+      });
+      navigate('/teacher-dashboard');
+    } catch (error) {
+      toast({
+        title: "Login Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <Loader message="Signing you in..." />;
   }
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      <form onSubmit={submit} className="p-6 bg-white rounded shadow space-y-4">
-        <h2 className="text-xl font-bold">Teacher Login</h2>
-        <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="border p-2 rounded w-full" />
-        <input value={password} type="password" onChange={e=>setPassword(e.target.value)} placeholder="Password" className="border p-2 rounded w-full" />
-        <button className="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
-        <p className="text-sm">New teacher? <Link to="/teacher/signup" className="text-blue-600">Signup</Link></p>
-      </form>
+    <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
+      <div className="max-w-md mx-auto">
+        <Button 
+          variant="outline" 
+          className="mb-6 bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary"
+          onClick={() => navigate('/teacher-options')}
+        >
+          <ArrowLeft size={16} className="mr-2" />
+          Back
+        </Button>
+
+        <Card className="bg-white/95 backdrop-blur-sm shadow-hover border-0">
+          <CardHeader>
+            <div className="mx-auto mb-4 p-4 bg-primary/10 rounded-full">
+              <BookOpen className="h-12 w-12 text-primary" />
+            </div>
+            <CardTitle className="text-2xl text-center text-primary">Teacher Sign In</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  type="text"
+                  value={formData.username}
+                  onChange={(e) => setFormData({...formData, username: e.target.value})}
+                  placeholder="Enter your username"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
+
+              <Button 
+                type="submit" 
+                className="w-full bg-gradient-primary text-white border-0 hover:shadow-hover"
+                disabled={loading}
+              >
+                {loading ? 'Signing In...' : 'Sign In'}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-muted-foreground">
+                Don't have an account?{' '}
+                <Link to="/teacher-signup" className="text-primary hover:underline font-medium">
+                  Sign up here
+                </Link>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  )
-}
+  );
+};
+
+export default TeacherLogin;

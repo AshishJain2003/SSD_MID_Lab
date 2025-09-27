@@ -1,21 +1,50 @@
-import axios from 'axios'
-const API = 'http://localhost:5000/'
+const API_BASE_URL = 'http://localhost:5000'; // Adjust if needed
 
-export async function createClassroom(token, name){
-  const res = await axios.post(`${API}/classrooms`, { name }, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
-  return res.data
-}
+export const classroomAPI = {
+  // Create classroom
+  createClassroom: async (name) => {
+    const response = await fetch(`${API_BASE_URL}/classroom`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ name }),
+    });
 
-export async function listClassrooms(token){
-  const res = await axios.get(`${API}/classrooms`, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
-  return res.data
-}
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to create classroom');
+    }
 
-export async function joinClassroom(code){
-  const res = await axios.post(`${API}/classrooms/join`, { code })
-  return res.data
-}
+    return await response.json();
+  },
+
+  // Get classrooms by teacher
+  getClassrooms: async () => {
+    const response = await fetch(`${API_BASE_URL}/classroom`, {
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to fetch classrooms');
+    }
+
+    return await response.json();
+  },
+
+  // Join classroom by code
+  joinClassroom: async (code) => {
+    const response = await fetch(`${API_BASE_URL}/classroom/code/${code}`, {
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to join classroom');
+    }
+
+    return await response.json();
+  }
+};

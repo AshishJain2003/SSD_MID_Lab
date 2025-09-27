@@ -1,15 +1,22 @@
-import React from 'react'
+import { Button } from '@/components/ui/button';
 
-export default function FilterBar({ filter, setFilter }){
+const FilterBar = ({ categories, selectedCategory, onCategoryChange }) => {
   return (
-    <div className="flex gap-2">
-      {['all','unanswered','answered','important'].map(f=>(
-        <button key={f}
-          onClick={()=>setFilter(f)}
-          className={`px-3 py-1 rounded ${filter===f ? 'bg-blue-600 text-white':'bg-gray-200'}`}>
-          {f}
-        </button>
+    <div className="flex flex-wrap gap-2 p-4 bg-card rounded-lg shadow-card">
+      <span className="text-sm font-medium text-muted-foreground mr-2 self-center">Filter by:</span>
+      {categories.map(category => (
+        <Button
+          key={category}
+          variant={selectedCategory === category ? "default" : "outline"}
+          size="sm"
+          onClick={() => onCategoryChange(category)}
+          className="capitalize"
+        >
+          {category === 'all' ? 'All Questions' : category}
+        </Button>
       ))}
     </div>
-  )
-}
+  );
+};
+
+export default FilterBar;
