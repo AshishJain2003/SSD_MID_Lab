@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 
 const teacherSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true,index : true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  classroom_id: {type: String, required:true,unique:true}
 }); 
 
 // Hash password before saving

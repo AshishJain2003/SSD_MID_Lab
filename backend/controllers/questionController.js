@@ -20,23 +20,20 @@ export const createQuestion = async (req, res) => {
   }
 };
 
-
 // teacher/student fetch questions
 export const getQuestions = async (req, res) => {
   try {
-    const filters = {};
-    if (req.query.classroom_id) filters.classroom_id = req.query.classroom_id;
+    const { classroom_id } = req.params; 
+    const filters = { classroom_id };  
     if (req.query.status) filters.status = req.query.status;
     if (req.query.author) filters.author = req.query.author;
-
     if (req.query.from || req.query.to) {
-      filters.createdAt= {};
+      filters.createdAt = {};
       if (req.query.from) filters.createdAt.$gte = new Date(req.query.from);
       if (req.query.to) filters.createdAt.$lte = new Date(req.query.to);
     }
-
     const questions = await Question.find(filters).sort({ createdAt: -1 });
-    res.json({count:questions.length , data: questions});
+    res.json({ count: questions.length, data: questions });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

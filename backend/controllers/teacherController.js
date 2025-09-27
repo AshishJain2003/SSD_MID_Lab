@@ -10,10 +10,12 @@ export const createTeacher = async (req, res) => {
       return res.status(400).json({ error: "Teacher already exists" });
     }
 
-    const teacher = new Teacher({ username, password });
+    const classroom_id = new mongoose.Types.ObjectId().toString();
+
+    const teacher = new Teacher({ username, password ,classroom_id});
     await teacher.save();
 
-    res.status(201).json({ message: "Teacher created successfully", teacher: { id: teacher._id, username: teacher.username } });
+    res.status(201).json({ message: "Teacher created successfully", teacher: { id: teacher._id, username: teacher.username ,classroom_id:teacher.classroom_id} });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
