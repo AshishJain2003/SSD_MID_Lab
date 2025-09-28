@@ -6,6 +6,7 @@ import cors from "cors";
 import { connectDB } from "./config/db.js";
 import questionRoutes from "./routes/questionRoutes.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
+import teachingAssistantRoutes from "./routes/teachingAssistantRoutes.js";
 import { initPassport } from "./config/passport.js";
 
 dotenv.config();
@@ -15,7 +16,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.REACT_URL || "http://localhost:3000",
+    origin: process.env.REACT_URL || "http://localhost:8080",
     credentials: true,
   })
 );
@@ -31,6 +32,7 @@ app.use(passport.session());
 
 app.use("/question", questionRoutes);
 app.use("/teacher", teacherRoutes);
+app.use("/ta", teachingAssistantRoutes);
 
 app.get("/", (req, res) => res.send("Note App API running"));
 
