@@ -29,7 +29,6 @@ A comprehensive web application that facilitates interactive classroom discussio
 - **Answer Questions**: Provide detailed answers to student questions
 - **File Attachments**: Upload supporting materials (images, documents, etc.)
 - **Classroom Access**: Access multiple classrooms to answer questions
-- **Answer Management**: Edit and update their answers
 
 ## 🛠️ Technology Stack
 
@@ -235,20 +234,6 @@ The application features a modern, responsive design with:
 2. Deploy the `dist` folder to platforms like Vercel, Netlify, or AWS S3
 3. Configure environment variables for API endpoints
 
-## 🧪 Testing
-
-### Backend Testing
-```bash
-cd backend
-npm test
-```
-
-### Frontend Testing
-```bash
-cd frontend
-npm run test
-```
-
 ## 📝 Assumptions Made
 
 1. **Classroom Codes**: 6-character alphanumeric codes are sufficient for classroom identification
@@ -261,31 +246,3 @@ npm run test
 8. **Classroom Size**: No specific limits on classroom size or question count
 9. **File Types**: Common file types (images, documents, PDFs) are sufficient
 10. **Database**: MongoDB provides adequate performance for the expected user load
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Authors
-
-- **Sai Anirudh Karre** - Project Creator
-- **Development Team** - Full-stack implementation
-
-## 🙏 Acknowledgments
-
-- React and Node.js communities for excellent documentation
-- MongoDB for robust database solutions
-- Tailwind CSS for beautiful styling framework
-- Radix UI for accessible component library
-
----
-
-**Note**: This project was developed as part of the SSD (Software System Design) MID Lab assignment. The application demonstrates modern full-stack development practices with React, Node.js, and MongoDB.
