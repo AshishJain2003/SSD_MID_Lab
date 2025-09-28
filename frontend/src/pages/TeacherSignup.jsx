@@ -81,7 +81,7 @@ const TeacherSignup = () => {
       <div className="max-w-md mx-auto">
         <Button 
           variant="outline" 
-          className="mb-6 bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary"
+          className="w-full bg-gradient-primary text-white border-0 hover:shadow-hover"
           onClick={() => navigate('/teacher-options')}
         >
           <ArrowLeft size={16} className="mr-2" />
