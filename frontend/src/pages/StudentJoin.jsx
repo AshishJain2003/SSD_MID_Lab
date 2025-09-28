@@ -31,12 +31,13 @@ const StudentJoin = () => {
 
     setLoading(true);
     try {
-      const classroom = await classroomAPI.joinClassroom(formData.classroomCode.toUpperCase());
+      const classroom = await classroomAPI.joinClassroom(formData.classroomCode.toUpperCase(), formData.studentName.trim());
 
       // Store student info for the session
       localStorage.setItem('currentStudent', JSON.stringify({
         name: formData.studentName.trim(),
-        classroomId: classroom._id
+        classroomId: classroom._id,
+        classroomName: classroom.name
       }));
 
       toast({
@@ -44,7 +45,7 @@ const StudentJoin = () => {
         description: `Welcome to ${classroom.name}!`
       });
 
-      navigate(`/classroom-view/${classroom._id}`);
+      navigate('/student-dashboard');
     } catch (error) {
       toast({
         title: "Error",
@@ -93,18 +94,18 @@ const StudentJoin = () => {
                 />
               </div>
 
-              <div>
-                <Label htmlFor="classroomCode">Classroom Code</Label>
-                <Input
-                  id="classroomCode"
-                  type="text"
-                  value={formData.classroomCode}
-                  onChange={(e) => setFormData({...formData, classroomCode: e.target.value.toUpperCase()})}
-                  placeholder="Enter 6-digit code"
-                  maxLength={6}
-                  required
-                />
-              </div>
+               <div>
+                 <Label htmlFor="classroomCode">Classroom Code</Label>
+                 <Input
+                   id="classroomCode"
+                   type="text"
+                   value={formData.classroomCode}
+                   onChange={(e) => setFormData({...formData, classroomCode: e.target.value.toUpperCase()})}
+                   placeholder="Enter 6-character code"
+                   maxLength={6}
+                   required
+                 />
+               </div>
 
               <Button 
                 type="submit" 

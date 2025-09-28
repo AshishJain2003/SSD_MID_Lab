@@ -3,8 +3,8 @@ import Question from "../models/Question.js";
 // Student posts a question
 export const createQuestion = async (req, res) => {
   try {
-    const { classroom_id, question, author } = req.body;
-    const newQuestion = new Question({ classroom_id, question, author });
+    const { classroom_id, question, author,color,category } = req.body;
+    const newQuestion = new Question({ classroom_id, question, author,color,category });
     await newQuestion.save();
     res.status(201).json(newQuestion);
   } catch (err) {
@@ -14,8 +14,9 @@ export const createQuestion = async (req, res) => {
 
 export const getQuestions = async (req, res) => {
   try {
-    const filters = {};
-    if(req.query.classroom_id) filters.classroom_id = req.query.classroom_id;
+    const { classroomId } = req.params;
+    const filters = { classroom_id: classroomId };
+    
     if (req.query.status) filters.status = req.query.status;
     if (req.query.author) filters.author = req.query.author;
     if (req.query.from || req.query.to) {
@@ -36,7 +37,7 @@ export const updateStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!["answered", "unanswered"].includes(status)) {
+    if (!["answered", "unanswered", "important"].includes(status)) {
       return res.status(400).json({ error: "Invalid status value" });
     }
 

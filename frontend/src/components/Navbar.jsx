@@ -1,7 +1,21 @@
-import { LogOut, Users, BookOpen } from 'lucide-react';
+import { LogOut, Users, BookOpen, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navbar = ({ user, userType, onLogout, classroomInfo }) => {
+  const getUserName = () => {
+    if (userType === 'teacher' && user) {
+      return user.username;
+    } else if (userType === 'student') {
+      const studentData = localStorage.getItem('currentStudent');
+      if (studentData) {
+        const student = JSON.parse(studentData);
+        return student.name;
+      }
+      return 'Student';
+    }
+    return 'User';
+  };
+
   return (
     <nav className="bg-gradient-primary shadow-card border-b border-border/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,19 +30,37 @@ const Navbar = ({ user, userType, onLogout, classroomInfo }) => {
                 <span className="text-sm">•</span>
                 <span className="text-sm font-medium">{classroomInfo.name}</span>
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
-                  Code: {classroomInfo.code}
+                  Code: {classroomInfo._id}
                 </span>
               </div>
             )}
           </div>
-          
-          <div className="flex items-center space-x-4">
+
+          <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-2 text-white">
               <Users size={16} />
               <span className="text-sm">
-                {userType === 'teacher' ? `Teacher: ${user.name}` : `Student: ${user.name}`}
+                {userType === 'teacher' ? `Teacher: ${getUserName()}` : `Student: ${getUserName()}`}
               </span>
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.location.href = '/ta-login'}
+              className="bg-green-600/20 border-green-400/30 text-green-100 hover:bg-green-600 hover:text-white"
+            >
+              <GraduationCap size={16} className="mr-1" />
+              TA Login
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.location.href = '/ta-signup'}
+              className="bg-green-600/10 border-green-400/20 text-green-200 hover:bg-green-600/30 hover:text-green-100"
+            >
+              <GraduationCap size={16} className="mr-1" />
+              TA Signup
+            </Button>
             <Button
               variant="outline"
               size="sm"
